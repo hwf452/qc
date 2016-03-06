@@ -9,7 +9,7 @@
 import Foundation
 
 struct Options {
-  static let setPassword = "--pwd"
+  static let setPassword = "--set-pwd"
   static let printUsage = "--help"
 }
 
@@ -23,12 +23,17 @@ func setPassword(newPassword: String?) {
 }
 
 func printUsage() {
-  print("usage: qc [\(Options.setPassword) <password>] | [\(Options.printUsage)]")
+  print("usage: qc                             connect to VPN")
+  print("   or: qc --set-pwd <password>        set password")
+  print("   or: qc --help                      print help")
+  print("\nArguments:")
+  print("  \(Options.setPassword)\t\tSet a new password to be used")
+  print("  \(Options.printUsage)\t\tPrint Help (this message) and exit")
 }
 
 func runScript() {
   guard let password = NSUserDefaults.password else {
-    print("No password found!")
+    print("Password not found!")
     printUsage()
     exit(EXIT_FAILURE)
   }
