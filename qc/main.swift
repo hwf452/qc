@@ -56,15 +56,14 @@ func runScript() {
   }
   
   script.executeAndReturnError(nil)
-  
 }
 
 NSUserDefaults.initiliaze()
 
-if Process.arguments.contains(Options.setPassword) {
-  setPassword(Process.arguments.last)
+if Process.hasOption(Options.setPassword) {
+  setPassword(Process.argumentForOption(Options.setPassword))
 }
-else if Process.arguments.contains(Options.printUsage) {
+else if Process.hasOption(Options.printUsage) {
   printUsage()
 }
 else {
@@ -72,3 +71,4 @@ else {
 }
 
 exit(EXIT_SUCCESS)
+
