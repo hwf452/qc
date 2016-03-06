@@ -11,6 +11,7 @@
 		4A5E77281C8C617E007FB014 /* NSUserDefaults+qc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E77271C8C617E007FB014 /* NSUserDefaults+qc.swift */; };
 		4A5E772B1C8C7458007FB014 /* Array+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772A1C8C7458007FB014 /* Array+Options.swift */; };
 		4A5E772D1C8C77FD007FB014 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772C1C8C77FD007FB014 /* Options.swift */; };
+		4A5E772F1C8C8288007FB014 /* QC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772E1C8C8288007FB014 /* QC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,7 @@
 		4A5E77271C8C617E007FB014 /* NSUserDefaults+qc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults+qc.swift"; sourceTree = "<group>"; };
 		4A5E772A1C8C7458007FB014 /* Array+Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Options.swift"; sourceTree = "<group>"; };
 		4A5E772C1C8C77FD007FB014 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		4A5E772E1C8C8288007FB014 /* QC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				4A5E77271C8C617E007FB014 /* NSUserDefaults+qc.swift */,
 				4A5E772A1C8C7458007FB014 /* Array+Options.swift */,
 				4A5E772C1C8C77FD007FB014 /* Options.swift */,
+				4A5E772E1C8C8288007FB014 /* QC.swift */,
 			);
 			path = qc;
 			sourceTree = "<group>";
@@ -131,6 +134,7 @@
 				4A5E772D1C8C77FD007FB014 /* Options.swift in Sources */,
 				4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */,
 				4A5E772B1C8C7458007FB014 /* Array+Options.swift in Sources */,
+				4A5E772F1C8C8288007FB014 /* QC.swift in Sources */,
 				4A5E77281C8C617E007FB014 /* NSUserDefaults+qc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
