@@ -19,13 +19,25 @@ struct DefaultsKey {
 }
 
 extension NSUserDefaults {
+  
+  static func initiliaze() {
+    guard !initialized else { return }
+    let defaults = [DefaultsKey.initialized: true]
+    standardUserDefaults().registerDefaults(defaults)
+    standardUserDefaults().synchronize()
+  }
+  
+  private static func _setObj(obj: AnyObject?, forKey key: String) {
+    standardUserDefaults().setObject(obj, forKey: key)
+    standardUserDefaults().synchronize()
+  }
+  
   static var initialized: Bool {
     get {
-      return self.standardUserDefaults().boolForKey(DefaultsKey.initialized)
+      return standardUserDefaults().boolForKey(DefaultsKey.initialized)
     }
     set {
-      standardUserDefaults().setBool(newValue, forKey: DefaultsKey.initialized)
-      standardUserDefaults().synchronize()
+      _setObj(newValue, forKey: DefaultsKey.initialized)
     }
   }
   
@@ -34,8 +46,7 @@ extension NSUserDefaults {
       return standardUserDefaults().stringForKey(DefaultsKey.password)
     }
     set {
-      standardUserDefaults().setObject(newValue, forKey: DefaultsKey.password)
-      standardUserDefaults().synchronize()
+      _setObj(newValue, forKey: DefaultsKey.password)
     }
   }
 }
@@ -59,12 +70,29 @@ func runScript() {
     printUsage()
     exit(EXIT_FAILURE)
   }
-  password
+
+  let format =
+  "activate application \"Cisco AnyConnect Secure Mobility Client\"\n" +
+  "tell application \"System Events\" to tell process \"Cisco AnyConnect Secure Mobility Client\"\n" +
+  "click button \"Connect\" of window 1\n" +
+  "repeat until window 2 exists\n" +
+  "end repeat\n" +
+  "keystroke \"%@\"\n" +
+  "click button \"OK\" of window 1\n" +
+  "end tell\n"
+  
+  let source = String(format: format, password)
+  guard let script = NSAppleScript(source: source) else {
+    print("Could not create script!")
+    printUsage()
+    exit(EXIT_FAILURE)
+  }
+  
+  script.executeAndReturnError(nil)
+  
 }
 
-if NSUserDefaults.initialized == false {
-  NSUserDefaults.initialized = true
-}
+NSUserDefaults.initiliaze()
 
 if Process.arguments.contains(Options.setPassword) {
   setPassword(Process.arguments.last)
@@ -76,3 +104,4 @@ else {
   runScript()
 }
 
+exit(EXIT_SUCCESS)
