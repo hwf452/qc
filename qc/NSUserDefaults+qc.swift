@@ -5,22 +5,24 @@ struct DefaultsKey {
   static let password = "password"
 }
 
-extension NSUserDefaults {
+struct Defaults {
   
-  static func initiliaze() {
+  private static let defaults = NSUserDefaults.standardUserDefaults()
+  
+  static func setup() {
     guard !initialized else { return }
-    let defaults = [DefaultsKey.initialized: true]
-    standardUserDefaults().registerDefaults(defaults)
-    standardUserDefaults().synchronize()
+    let initialDefaults = [DefaultsKey.initialized: true]
+    defaults.registerDefaults(initialDefaults)
+    defaults.synchronize()
   }
   
   private static func _setObj(obj: AnyObject?, forKey key: String) {
-    standardUserDefaults().setObject(obj, forKey: key)
-    standardUserDefaults().synchronize()
+    defaults.setObject(obj, forKey: key)
+    defaults.synchronize()
   }
   
   private static func _getObjForKey<T>(key: String) -> T? {
-      return standardUserDefaults().objectForKey(key) as? T
+      return defaults.objectForKey(key) as? T
   }
   
   static var initialized: Bool {

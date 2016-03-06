@@ -3,7 +3,7 @@ import Foundation
 struct QC {
   
   static func run(arguments: [String]) {
-    NSUserDefaults.initialize()
+    Defaults.setup()
     
     if arguments.hasOption(Options.setPassword) {
       setPassword(arguments.argumentForOption(Options.setPassword))
@@ -24,7 +24,7 @@ struct QC {
       exit(EXIT_FAILURE)
     }
     
-    NSUserDefaults.password = password
+    Defaults.password = password
   }
   
   static func printUsage() {
@@ -37,7 +37,7 @@ struct QC {
   }
   
   static func runScript() {
-    guard let password = NSUserDefaults.password else {
+    guard let password = Defaults.password else {
       print("Password not found!")
       printUsage()
       exit(EXIT_FAILURE)
