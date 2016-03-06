@@ -8,11 +8,6 @@
 
 import Foundation
 
-struct Options {
-  static let setPassword = "--set-pwd"
-  static let printUsage = "--help"
-}
-
 func setPassword(newPassword: String?) {
   guard let password = newPassword else {
     printUsage()
@@ -24,8 +19,8 @@ func setPassword(newPassword: String?) {
 
 func printUsage() {
   print("usage: qc                             connect to VPN")
-  print("   or: qc --set-pwd <password>        set password")
-  print("   or: qc --help                      print help")
+  print("   or: qc \(Options.setPassword) <password>        set password")
+  print("   or: qc \(Options.printUsage)                      print help")
   print("\nArguments:")
   print("  \(Options.setPassword)\t\tSet a new password to be used")
   print("  \(Options.printUsage)\t\tPrint Help (this message) and exit")
