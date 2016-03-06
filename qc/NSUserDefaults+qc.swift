@@ -19,9 +19,13 @@ extension NSUserDefaults {
     standardUserDefaults().synchronize()
   }
   
+  private static func _getObjForKey<T>(key: String) -> T? {
+      return standardUserDefaults().objectForKey(key) as? T
+  }
+  
   static var initialized: Bool {
     get {
-    return standardUserDefaults().boolForKey(DefaultsKey.initialized)
+      return _getObjForKey(DefaultsKey.initialized) ?? false
     }
     set {
       _setObj(newValue, forKey: DefaultsKey.initialized)
@@ -30,7 +34,7 @@ extension NSUserDefaults {
   
   static var password: String? {
     get {
-    return standardUserDefaults().stringForKey(DefaultsKey.password)
+      return _getObjForKey(DefaultsKey.password)
     }
     set {
       _setObj(newValue, forKey: DefaultsKey.password)
