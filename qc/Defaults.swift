@@ -1,22 +1,16 @@
 import Foundation
 
-struct DefaultsKey {
-  static let initialized = "initialized"
-  static let password = "password"
-}
-
 public struct Defaults {
   
   private let defaults: NSUserDefaults
   
-  private var initialized: Bool {
-    get { return _getObjForKey(DefaultsKey.initialized) ?? false }
-    set { _setObj(newValue, forKey: DefaultsKey.initialized) }
+  private struct Key {
+    static let initialized = "initialized"
   }
   
-  public var password: String? {
-    get { return _getObjForKey(DefaultsKey.password) }
-    set { _setObj(newValue, forKey: DefaultsKey.password) }
+  private var initialized: Bool {
+    get { return objectForKey(Key.initialized) ?? false }
+    set { setObject(newValue, forKey: Key.initialized) }
   }
   
   public init(suiteName suitename: String?) {
@@ -24,19 +18,26 @@ public struct Defaults {
     setup()
   }
   
+  private func synchronize(@noescape operation: NSUserDefaults -> ()) {
+    operation(defaults)
+    defaults.synchronize()
+  }
+  
   private func setup() {
     guard !initialized else { return }
-    let initialDefaults = [DefaultsKey.initialized: true]
-    defaults.registerDefaults(initialDefaults)
-    defaults.synchronize()
+    let initialDefaults = [Key.initialized: true]
+    synchronize {
+      $0.registerDefaults(initialDefaults)
+    }
   }
   
-  private func _setObj(obj: AnyObject?, forKey key: String) {
-    defaults.setObject(obj, forKey: key)
-    defaults.synchronize()
+  public func setObject(obj: AnyObject?, forKey key: String) {
+    synchronize {
+      $0.setObject(obj, forKey: key)
+    }
   }
   
-  private func _getObjForKey<T>(key: String) -> T? {
+  public func objectForKey<T>(key: String) -> T? {
     return defaults.objectForKey(key) as? T
   }
 }
