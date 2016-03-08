@@ -1,5 +1,5 @@
 import Foundation
-import Result
+
 
 enum QCError: ErrorType {
   case PasswordNotFound
