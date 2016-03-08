@@ -1,5 +1,5 @@
 
-struct Options {
+struct Option {
   static let setPassword = "--set-pwd"
-  static let printUsage = "--help"
+  static let help = "--help"
 }

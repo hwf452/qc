@@ -5,41 +5,38 @@ struct DefaultsKey {
   static let password = "password"
 }
 
-struct Defaults {
+public struct Defaults {
   
-  private static let defaults = NSUserDefaults.standardUserDefaults()
+  private let defaults: NSUserDefaults
   
-  static func setup() {
+  private var initialized: Bool {
+    get { return _getObjForKey(DefaultsKey.initialized) ?? false }
+    set { _setObj(newValue, forKey: DefaultsKey.initialized) }
+  }
+  
+  public var password: String? {
+    get { return _getObjForKey(DefaultsKey.password) }
+    set { _setObj(newValue, forKey: DefaultsKey.password) }
+  }
+  
+  public init(suiteName suitename: String?) {
+    defaults = NSUserDefaults(suiteName: suitename) ?? NSUserDefaults.standardUserDefaults()
+    setup()
+  }
+  
+  private func setup() {
     guard !initialized else { return }
     let initialDefaults = [DefaultsKey.initialized: true]
     defaults.registerDefaults(initialDefaults)
     defaults.synchronize()
   }
   
-  private static func _setObj(obj: AnyObject?, forKey key: String) {
+  private func _setObj(obj: AnyObject?, forKey key: String) {
     defaults.setObject(obj, forKey: key)
     defaults.synchronize()
   }
   
-  private static func _getObjForKey<T>(key: String) -> T? {
-      return defaults.objectForKey(key) as? T
-  }
-  
-  static var initialized: Bool {
-    get {
-      return _getObjForKey(DefaultsKey.initialized) ?? false
-    }
-    set {
-      _setObj(newValue, forKey: DefaultsKey.initialized)
-    }
-  }
-  
-  static var password: String? {
-    get {
-      return _getObjForKey(DefaultsKey.password)
-    }
-    set {
-      _setObj(newValue, forKey: DefaultsKey.password)
-    }
+  private func _getObjForKey<T>(key: String) -> T? {
+    return defaults.objectForKey(key) as? T
   }
 }

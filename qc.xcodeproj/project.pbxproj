@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A36BC911C8D8E2200E491D7 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A36BC901C8D8E2200E491D7 /* Result.swift */; };
+		4A36BC941C8DA7DC00E491D7 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A36BC931C8DA7DC00E491D7 /* Result.framework */; };
 		4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E771D1C8C4A6C007FB014 /* main.swift */; };
 		4A5E77281C8C617E007FB014 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E77271C8C617E007FB014 /* Defaults.swift */; };
 		4A5E772B1C8C7458007FB014 /* Array+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772A1C8C7458007FB014 /* Array+Options.swift */; };
 		4A5E772D1C8C77FD007FB014 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772C1C8C77FD007FB014 /* Options.swift */; };
-		4A5E772F1C8C8288007FB014 /* QC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E772E1C8C8288007FB014 /* QC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,13 +27,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4A36BC901C8D8E2200E491D7 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		4A36BC931C8DA7DC00E491D7 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
 		4A5E771A1C8C4A6C007FB014 /* qc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = qc; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E771D1C8C4A6C007FB014 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		4A5E77271C8C617E007FB014 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		4A5E772A1C8C7458007FB014 /* Array+Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Options.swift"; sourceTree = "<group>"; };
 		4A5E772C1C8C77FD007FB014 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
-		4A5E772E1C8C8288007FB014 /* QC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,16 +40,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A36BC941C8DA7DC00E491D7 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A36BC921C8DA79E00E491D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4A36BC931C8DA7DC00E491D7 /* Result.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4A5E77111C8C4A6C007FB014 = {
 			isa = PBXGroup;
 			children = (
 				4A5E771C1C8C4A6C007FB014 /* qc */,
+				4A36BC921C8DA79E00E491D7 /* Frameworks */,
 				4A5E771B1C8C4A6C007FB014 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,8 +79,6 @@
 				4A5E77271C8C617E007FB014 /* Defaults.swift */,
 				4A5E772A1C8C7458007FB014 /* Array+Options.swift */,
 				4A5E772C1C8C77FD007FB014 /* Options.swift */,
-				4A5E772E1C8C8288007FB014 /* QC.swift */,
-				4A36BC901C8D8E2200E491D7 /* Result.swift */,
 			);
 			path = qc;
 			sourceTree = "<group>";
@@ -134,11 +140,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A36BC911C8D8E2200E491D7 /* Result.swift in Sources */,
 				4A5E772D1C8C77FD007FB014 /* Options.swift in Sources */,
 				4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */,
 				4A5E772B1C8C7458007FB014 /* Array+Options.swift in Sources */,
-				4A5E772F1C8C8288007FB014 /* QC.swift in Sources */,
 				4A5E77281C8C617E007FB014 /* Defaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,6 +233,10 @@
 		4A5E77221C8C4A6C007FB014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -236,6 +244,10 @@
 		4A5E77231C8C4A6C007FB014 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
