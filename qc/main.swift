@@ -7,16 +7,24 @@ enum QCError: ErrorType {
   case AppleScriptError(NSDictionary)
 }
 
+struct Option {
+  static let setPassword = "--set-password"
+  static let help = "--help"
+  static let network = "--network"
+}
+
 let arguments = Process.arguments
 var defaults = Defaults(suiteName: nil)
 
 let usage =
-  "usage: qc                             connect to VPN\n" +
-  "   or: qc \(Option.setPassword) <password>        set password\n" +
-  "   or: qc \(Option.help)                      print help\n" +
+  "usage: qc                           \tconnect to default VPN\n" +
+  "   or: qc \(Option.network) <network>     \tconnect to specific VPN\n" +
+  "   or: qc \(Option.setPassword) <password>\tset password\n" +
+  "   or: qc \(Option.help)                      \tprint help\n" +
   "\nArguments:\n" +
+  "  \(Option.network)\t\t\tConnect to a network with specific name\n" +
   "  \(Option.setPassword)\t\tSet a new password to be used\n" +
-  "  \(Option.help)\t\tPrint Help (this message) and exit\n"
+  "  \(Option.help)\t\t\tPrint Help (this message) and exit\n"
 
 
 let format =
@@ -43,12 +51,11 @@ func storePassword(password: String?) -> Result<String, QCError> {
   return .Success(password)
 }
 
-func updatePassword() {
-  if let error = storePassword(arguments.argumentForOption(Option.setPassword)).error {
-    printErrorAndExit(error)
-  } else {
-    print("Password updated!")
-  }
+func updatePassword(password: String?) -> Result<String, QCError> {
+  return
+    validatePassword(password)
+    .flatMap(storePassword)
+    .flatMap {_ in .Success("Password updated!") }
 }
 
 func validatePassword(password: String?) -> Result<String, QCError> {
@@ -58,7 +65,11 @@ func validatePassword(password: String?) -> Result<String, QCError> {
   }
 }
 
-func createScript(password: String) -> Result<NSAppleScript, QCError> {
+func validateNetwork(network: String?) -> Result<String, QCError> {
+  return .Success(network ?? "Intel Network")
+}
+
+func createScript(password: String, network: String) -> Result<NSAppleScript, QCError> {
   let source = String(format: format, password)
   if let script = NSAppleScript(source: source) {
     return .Success(script)
@@ -76,22 +87,27 @@ func executeScript(script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCE
   }
 }
 
-func connect(password: String?) -> Result<NSAppleEventDescriptor, QCError> {
+func connect(password: String?, network: String?) -> Result<NSAppleEventDescriptor, QCError> {
   return
-    validatePassword(password)
+    (validatePassword(password) &&& validateNetwork(network))
     .flatMap(createScript)
     .flatMap(executeScript)
 }
 
 
 if arguments.hasOption(Option.setPassword) {
-  updatePassword()
+  switch updatePassword(arguments.argumentForOption(Option.setPassword)) {
+  case let .Success(confirmation): print(confirmation)
+  case let .Failure(error): printErrorAndExit(error)
+  }
 }
 else if arguments.hasOption(Option.help) {
   print(usage)
 }
-else if let error = connect(defaults.password).error {
-  printErrorAndExit(error)
+else {
+  if let error = connect(defaults.password, network: arguments.argumentForOption(Option.network)).error {
+    printErrorAndExit(error)
+  }
 }
 
 exit(EXIT_SUCCESS)
