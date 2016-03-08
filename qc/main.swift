@@ -1,6 +1,5 @@
 import Foundation
 
-
 enum QCError: ErrorType {
   case PasswordNotFound
   case CouldNotCreateScript(String)
@@ -54,8 +53,8 @@ func storePassword(password: String?) -> Result<String, QCError> {
 func updatePassword(password: String?) -> Result<String, QCError> {
   return
     validatePassword(password)
-    .flatMap(storePassword)
-    .flatMap {_ in .Success("Password updated!") }
+    >>- storePassword
+    >>- {_ in .Success("Password updated! 🍻") }
 }
 
 func validatePassword(password: String?) -> Result<String, QCError> {
@@ -88,9 +87,9 @@ func executeScript(script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCE
 
 func connect(password: String?, network: String?) -> Result<NSAppleEventDescriptor, QCError> {
   return
-    (validatePassword(password) &&& validateNetwork(network))
-    .flatMap(createScript)
-    .flatMap(executeScript)
+    validatePassword(password) &&& validateNetwork(network)
+    >>- createScript
+    >>- executeScript
 }
 
 
