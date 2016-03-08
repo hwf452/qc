@@ -71,10 +71,9 @@ func validateNetwork(network: String?) -> Result<String, QCError> {
 
 func createScript(password: String, network: String) -> Result<NSAppleScript, QCError> {
   let source = String(format: format, password)
-  if let script = NSAppleScript(source: source) {
-    return .Success(script)
-  } else {
-    return .Failure(.CouldNotCreateScript(source))
+  switch NSAppleScript(source: source) {
+  case let .Some(script): return .Success(script)
+  case .None: return .Failure(.CouldNotCreateScript(source))
   }
 }
 
