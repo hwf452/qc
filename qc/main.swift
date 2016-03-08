@@ -3,7 +3,7 @@ import Result
 
 enum QCError: ErrorType {
   case PasswordNotFound
-  case CouldNotCreateScript
+  case CouldNotCreateScript(String)
   case AppleScriptError(NSDictionary)
 }
 
@@ -63,7 +63,7 @@ func createScript(password: String) -> Result<NSAppleScript, QCError> {
   if let script = NSAppleScript(source: source) {
     return .Success(script)
   } else {
-    return .Failure(.CouldNotCreateScript)
+    return .Failure(.CouldNotCreateScript(source))
   }
 }
 
