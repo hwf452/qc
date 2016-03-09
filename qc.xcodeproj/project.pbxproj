@@ -18,6 +18,7 @@
 		4AB66E231C9054FA002F6CCF /* LocksmithInternetAuthenticationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB66E1C1C9054FA002F6CCF /* LocksmithInternetAuthenticationType.swift */; };
 		4AB66E241C9054FA002F6CCF /* LocksmithInternetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB66E1D1C9054FA002F6CCF /* LocksmithInternetProtocol.swift */; };
 		4AB66E251C9054FA002F6CCF /* LocksmithSecurityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB66E1E1C9054FA002F6CCF /* LocksmithSecurityClass.swift */; };
+		4AC57A301C9057A0009D26BC /* NetworkAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC57A2F1C9057A0009D26BC /* NetworkAccount.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +46,7 @@
 		4AB66E1C1C9054FA002F6CCF /* LocksmithInternetAuthenticationType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocksmithInternetAuthenticationType.swift; path = Locksmith/Source/LocksmithInternetAuthenticationType.swift; sourceTree = SOURCE_ROOT; };
 		4AB66E1D1C9054FA002F6CCF /* LocksmithInternetProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocksmithInternetProtocol.swift; path = Locksmith/Source/LocksmithInternetProtocol.swift; sourceTree = SOURCE_ROOT; };
 		4AB66E1E1C9054FA002F6CCF /* LocksmithSecurityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocksmithSecurityClass.swift; path = Locksmith/Source/LocksmithSecurityClass.swift; sourceTree = SOURCE_ROOT; };
+		4AC57A2F1C9057A0009D26BC /* NetworkAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkAccount.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				4A33EF321C8F410D008FEFCF /* Result */,
 				4A5E771D1C8C4A6C007FB014 /* main.swift */,
 				4A5E772A1C8C7458007FB014 /* Array+Options.swift */,
+				4AC57A2F1C9057A0009D26BC /* NetworkAccount.swift */,
 			);
 			path = qc;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				4A33EF301C8F4108008FEFCF /* Result.swift in Sources */,
 				4AB66E231C9054FA002F6CCF /* LocksmithInternetAuthenticationType.swift in Sources */,
 				4AB66E1F1C9054FA002F6CCF /* Dictionary_Initializers.swift in Sources */,
+				4AC57A301C9057A0009D26BC /* NetworkAccount.swift in Sources */,
 				4AB66E241C9054FA002F6CCF /* LocksmithInternetProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
