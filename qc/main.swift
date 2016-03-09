@@ -37,7 +37,7 @@ let format =
 "end tell\n"
 
 func printErrorAndExit(error: ErrorType) {
-  print(error)
+  print("\nerror: \(error)!\n")
   print(usage)
   exit(EXIT_FAILURE)
 }
