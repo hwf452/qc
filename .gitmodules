@@ -1,6 +1,3 @@
 [submodule "Result"]
 	path = Result
 	url = https://github.com/antitypical/Result.git
-[submodule "Locksmith"]
-	path = Locksmith
-	url = https://github.com/matthewpalmer/Locksmith.git
