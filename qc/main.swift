@@ -9,19 +9,20 @@ enum QCError: ErrorType {
 struct Option {
   static let setPassword = "--set-password"
   static let help = "--help"
-  static let network = "--network"
+  static let setNetwork = "--set-network"
+  static let clear = "--clear"
 }
 
 let arguments = Process.arguments
-var defaults = Defaults(suiteName: nil)
+var defaults = Keychain(suiteName: "qc")
 
 let usage =
   "usage: qc                           \tconnect to default VPN\n" +
-  "   or: qc \(Option.network) <network>     \tconnect to specific VPN\n" +
+  "   or: qc \(Option.setNetwork) <network>     \tconnect to specific VPN\n" +
   "   or: qc \(Option.setPassword) <password>\tset password\n" +
   "   or: qc \(Option.help)                      \tprint help\n" +
   "\nArguments:\n" +
-  "  \(Option.network)\t\t\tConnect to a network with specific name\n" +
+  "  \(Option.setNetwork)\t\t\tConnect to a network with specific name\n" +
   "  \(Option.setPassword)\t\tSet a new password to be used\n" +
   "  \(Option.help)\t\t\tPrint Help (this message) and exit\n"
 
