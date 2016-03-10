@@ -2,7 +2,7 @@ import Foundation
 
 public final class Keychain {
   
-  private let suiteName: String
+  private let identifier: String
   private lazy var values: NSMutableDictionary = {
     guard let data = self.load(),
       values = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? NSMutableDictionary else {
@@ -11,8 +11,8 @@ public final class Keychain {
     return values
   }()
   
-  public init(suiteName: String) {
-    self.suiteName = suiteName
+  public init(identifier: String) {
+    self.identifier = identifier
   }
   
   public func getObjectForKey<T>(key: String) -> T? {
@@ -22,11 +22,12 @@ public final class Keychain {
   public func setObject(object: AnyObject?, forKey key: String) {
     if let objectToSet = object {
       values.setObject(objectToSet, forKey: key)
-    } else {
+    }
+    else {
       values.removeObjectForKey(key)
     }
-    let data = NSKeyedArchiver.archivedDataWithRootObject(values)
-    save(data)
+    let archivedData = NSKeyedArchiver.archivedDataWithRootObject(values)
+    save(archivedData)
   }
   
   public func clear() {
@@ -37,7 +38,7 @@ public final class Keychain {
   private func save(data: NSData) -> Bool {
     let query = [
       kSecClass as String       : kSecClassGenericPassword as String,
-      kSecAttrAccount as String : suiteName,
+      kSecAttrAccount as String : identifier,
       kSecValueData as String   : data ]
     
     SecItemDelete(query as CFDictionaryRef)
@@ -50,7 +51,7 @@ public final class Keychain {
   private func load() -> NSData? {
     let query = [
       kSecClass as String       : kSecClassGenericPassword,
-      kSecAttrAccount as String : suiteName,
+      kSecAttrAccount as String : identifier,
       kSecReturnData as String  : kCFBooleanTrue,
       kSecMatchLimit as String  : kSecMatchLimitOne ]
     
@@ -65,9 +66,9 @@ public final class Keychain {
   private func delete() -> Bool {
     let query = [
       kSecClass as String       : kSecClassGenericPassword,
-      kSecAttrAccount as String : suiteName ]
+      kSecAttrAccount as String : identifier ]
     
-    let status: OSStatus = SecItemDelete(query as CFDictionaryRef)
+    let status = SecItemDelete(query as CFDictionaryRef)
     
     return status == noErr
   }
