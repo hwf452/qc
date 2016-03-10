@@ -5,6 +5,7 @@ enum QCError: ErrorType {
   case NetworkNotSet
   case CouldNotCreateScript(String)
   case AppleScriptError(NSDictionary)
+  case UnknownOption(String)
 }
 
 struct Option {
@@ -31,6 +32,10 @@ let usage =
 let format =
 "activate application \"Cisco AnyConnect Secure Mobility Client\"\n" +
   "tell application \"System Events\" to tell process \"Cisco AnyConnect Secure Mobility Client\"\n" +
+  "if button \"Disconnect\" of window 1 exists then\n" +
+    "click button \"Disconnect\" of window 1\n" +
+    "return\n" +
+  "end if\n" +
   "tell combo box 1 of window 1 to set value to \"%@\"\n" +
   "click button \"Connect\" of window 1\n" +
   "repeat until window 2 exists\n" +
@@ -153,6 +158,10 @@ else if arguments.hasOption(Option.clear) {
 }
 else if arguments.hasOption(Option.network) {
   eval(connect(defaults.password, toNetwork: arguments.argumentForOption(Option.network)), success: nil)
+}
+else if arguments.count > 1 {
+  let option = arguments[1]
+  printErrorAndExit(QCError.UnknownOption(option))
 }
 else {
   eval(connect(defaults.password, toNetwork: defaults.network), success: nil)
