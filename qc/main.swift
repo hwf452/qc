@@ -13,24 +13,20 @@ struct Option {
   static let setup = "--setup"
   static let setPassword = "--set-password"
   static let setNetwork = "--set-network"
+  static let network = "--network"
 }
 
 let arguments = Process.arguments
 var defaults = Keychain(suiteName: "qc")
 
 let usage =
-  "usage: qc \t\t\t\tConnect to VPN\n" +
+  "usage: qc \t\t\t\tConnect to the saved network\n" +
+  "   or: qc \(Option.network) <network>\t\tConnect to the given network\n" +
   "   or: qc \(Option.setup) \t\t\tRun setup wizard\n" +
-  "   or: qc \(Option.setPassword) \t\tSet password\n" +
+  "   or: qc \(Option.setPassword) \t\tSetup password\n" +
   "   or: qc \(Option.setNetwork) <network>\tSet network\n" +
   "   or: qc \(Option.clear) \t\t\tClear saved settings\n" +
-  "   or: qc \(Option.help) \t\t\tPrint help\n" +
-  "\nArguments:\n" +
-  "  \(Option.setup)\t\t\tSetup password and network\n" +
-  "  \(Option.setNetwork)\t\t\tSetup network\n" +
-  "  \(Option.setPassword)\t\tSetup password\n" +
-  "  \(Option.setPassword)\t\tRemove saved settings\n" +
-  "  \(Option.help)\t\t\tPrint Help (this message) and exit\n"
+  "   or: qc \(Option.help) \t\t\tPrint help (this message) and exit\n"
 
 let format =
 "activate application \"Cisco AnyConnect Secure Mobility Client\"\n" +
@@ -127,10 +123,10 @@ func connect(password: String?, toNetwork network: String?) -> Result<NSAppleEve
     >>- executeScript
 }
 
-func eval<T>(result: Result<T, QCError>, success: T -> () = { print($0) }, fail: QCError -> () = printErrorAndExit) {
+func eval<T>(result: Result<T, QCError>, success: (T -> ())? = { print($0) }, fail: (QCError -> ())? = printErrorAndExit) {
   switch result {
-  case let .Success(res): success(res)
-  case let .Failure(error): fail(error)
+  case let .Success(res): success?(res)
+  case let .Failure(error): fail?(error)
   }
 }
 
@@ -155,8 +151,11 @@ else if arguments.hasOption(Option.clear) {
   defaults.clear()
   print("Settings cleared! 🖖")
 }
+else if arguments.hasOption(Option.network) {
+  eval(connect(defaults.password, toNetwork: arguments.argumentForOption(Option.network)), success: nil)
+}
 else {
-  eval(connect(defaults.password, toNetwork: defaults.network))
+  eval(connect(defaults.password, toNetwork: defaults.network), success: nil)
 }
 
 exit(EXIT_SUCCESS)
