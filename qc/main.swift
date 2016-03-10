@@ -18,7 +18,7 @@ struct Option {
 }
 
 let arguments = Process.arguments
-var defaults = Keychain(suiteName: "qc")
+var defaults = Keychain(identifier: "qc")
 
 let usage =
   "usage: qc \t\t\t\tConnect to the saved network\n" +
@@ -34,7 +34,7 @@ let format =
   "tell application \"System Events\" to tell process \"Cisco AnyConnect Secure Mobility Client\"\n" +
   "if button \"Disconnect\" of window 1 exists then\n" +
     "click button \"Disconnect\" of window 1\n" +
-    "return\n" +
+    "return 1\n" +
   "end if\n" +
   "tell combo box 1 of window 1 to set value to \"%@\"\n" +
   "click button \"Connect\" of window 1\n" +
@@ -42,6 +42,9 @@ let format =
   "end repeat\n" +
   "keystroke \"%@\"\n" +
   "click button \"OK\" of window 1\n" +
+  "repeat until button \"Disconnect\" of window 1 exists\n" +
+  "end repeat\n" +
+  "return 0\n" +
 "end tell\n"
 
 func printErrorAndExit(error: ErrorType) {
@@ -122,16 +125,21 @@ func executeScript(script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCE
   }
 }
 
-func connect(password: String?, toNetwork network: String?) -> Result<NSAppleEventDescriptor, QCError> {
+func recognizeEvent(descriptor: NSAppleEventDescriptor) -> Result<String, QCError> {
+    return descriptor.int32Value == 1 ? .Success("Disconnected! 🍻") : .Success("Connected! 👍")
+}
+
+func connect(password: String?, toNetwork network: String?) -> Result<String, QCError> {
   return validatePassword(password) &&& validateNetwork(network)
     >>- createScript
     >>- executeScript
+    >>- recognizeEvent
 }
 
-func eval<T>(result: Result<T, QCError>, success: (T -> ())? = { print($0) }, fail: (QCError -> ())? = printErrorAndExit) {
+func eval<T>(result: Result<T, QCError>, success: T -> () = { print($0) }, fail: QCError -> () = printErrorAndExit) {
   switch result {
-  case let .Success(res): success?(res)
-  case let .Failure(error): fail?(error)
+  case let .Success(res): success(res)
+  case let .Failure(error): fail(error)
   }
 }
 
@@ -157,14 +165,14 @@ else if arguments.hasOption(Option.clear) {
   print("Settings cleared! 🖖")
 }
 else if arguments.hasOption(Option.network) {
-  eval(connect(defaults.password, toNetwork: arguments.argumentForOption(Option.network)), success: nil)
+  eval(connect(defaults.password, toNetwork: arguments.argumentForOption(Option.network)))
 }
 else if arguments.count > 1 {
   let option = arguments[1]
   printErrorAndExit(QCError.UnknownOption(option))
 }
 else {
-  eval(connect(defaults.password, toNetwork: defaults.network), success: nil)
+  eval(connect(defaults.password, toNetwork: defaults.network))
 }
 
 exit(EXIT_SUCCESS)
