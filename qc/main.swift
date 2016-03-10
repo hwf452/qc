@@ -8,42 +8,29 @@ enum QCError: ErrorType {
 }
 
 struct Option {
-  static let setPassword = "--set-password"
   static let help = "--help"
-  static let setNetwork = "--set-network"
   static let clear = "--clear"
-}
-
-extension Keychain {
-  private struct Key {
-    static let Password = "password"
-    static let Network = "network"
-  }
-  
-  var password: String? {
-    get { return getObjectForKey(Key.Password) }
-    set { setObject(newValue, forKey: Key.Password) }
-  }
-  
-  var network: String? {
-    get { return getObjectForKey(Key.Network) }
-    set { setObject(newValue, forKey: Key.Network) }
-  }
+  static let setup = "--setup"
+  static let setPassword = "--set-password"
+  static let setNetwork = "--set-network"
 }
 
 let arguments = Process.arguments
 var defaults = Keychain(suiteName: "qc")
 
 let usage =
-  "usage: qc                           \tconnect to default VPN\n" +
-  "   or: qc \(Option.setNetwork) <network>     \tconnect to specific VPN\n" +
-  "   or: qc \(Option.setPassword) <password>\tset password\n" +
-  "   or: qc \(Option.help)                      \tprint help\n" +
+  "usage: qc \t\t\t\tConnect to VPN\n" +
+  "   or: qc \(Option.setup) \t\t\tRun setup wizard\n" +
+  "   or: qc \(Option.setPassword) \t\tSet password\n" +
+  "   or: qc \(Option.setNetwork) <network>\tSet network\n" +
+  "   or: qc \(Option.clear) \t\t\tClear saved settings\n" +
+  "   or: qc \(Option.help) \t\t\tPrint help\n" +
   "\nArguments:\n" +
-  "  \(Option.setNetwork)\t\t\tConnect to a network with specific name\n" +
-  "  \(Option.setPassword)\t\tSet a new password to be used\n" +
+  "  \(Option.setup)\t\t\tSetup password and network\n" +
+  "  \(Option.setNetwork)\t\t\tSetup network\n" +
+  "  \(Option.setPassword)\t\tSetup password\n" +
+  "  \(Option.setPassword)\t\tRemove saved settings\n" +
   "  \(Option.help)\t\t\tPrint Help (this message) and exit\n"
-
 
 let format =
 "activate application \"Cisco AnyConnect Secure Mobility Client\"\n" +
@@ -60,6 +47,16 @@ func printErrorAndExit(error: ErrorType) {
   print("\nerror: \(error)!\n")
   print(usage)
   exit(EXIT_FAILURE)
+}
+
+func getPassword() -> Result<String?, QCError> {
+  let password = getpass("Password: ")
+  return .Success(String.fromCString(password))
+}
+
+func getNetwork() -> Result<String?, QCError> {
+  print("Network: ", terminator: "")
+  return .Success(readLine(stripNewline: true))
 }
 
 func storePassword(password: String) -> Result<String, QCError> {
@@ -94,7 +91,7 @@ func updateValue<T>(value: T?, validator validate: T? -> Result<T, QCError>, sto
     >>- sendConfirmation
 }
 
-func validateValue<T>(value: T?, error: QCError) -> Result<T, QCError> {
+func validateOptional<T>(value: T?, error: QCError) -> Result<T, QCError> {
   switch value {
   case let .Some(value): return .Success(value)
   case .None: return .Failure(error)
@@ -102,17 +99,17 @@ func validateValue<T>(value: T?, error: QCError) -> Result<T, QCError> {
 }
 
 func validatePassword(password: String?) -> Result<String, QCError> {
-  return validateValue(password, error: .PasswordNotSet)
+  return validateOptional(password, error: .PasswordNotSet)
 }
 
 func validateNetwork(network: String?) -> Result<String, QCError> {
-  return validateValue(network, error: .NetworkNotSet)
+  return validateOptional(network, error: .NetworkNotSet)
 }
 
 func createScript(password: String, network: String) -> Result<NSAppleScript, QCError> {
   let source = String(format: format, network, password)
   let script = NSAppleScript(source: source)
-  return validateValue(script, error: .CouldNotCreateScript(source))
+  return validateOptional(script, error: .CouldNotCreateScript(source))
 }
 
 func executeScript(script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCError> {
@@ -130,18 +127,26 @@ func connect(password: String?, toNetwork network: String?) -> Result<NSAppleEve
     >>- executeScript
 }
 
-
-if arguments.hasOption(Option.setPassword) {
-  switch updatePassword(arguments.argumentForOption(Option.setPassword)) {
-  case let .Success(confirmation): print(confirmation)
-  case let .Failure(error): printErrorAndExit(error)
+func eval<T>(result: Result<T, QCError>, success: T -> () = { print($0) }, fail: QCError -> () = printErrorAndExit) {
+  switch result {
+  case let .Success(res): success(res)
+  case let .Failure(error): fail(error)
   }
 }
+
+func setup() {
+  eval(getPassword() >>- updatePassword)
+  eval(getNetwork() >>- updateNetwork)
+}
+
+if arguments.hasOption(Option.setup) {
+  setup()
+}
 else if arguments.hasOption(Option.setNetwork) {
-  switch updateNetwork(arguments.argumentForOption(Option.setNetwork)) {
-  case let .Success(confirmation): print(confirmation)
-  case let .Failure(error): printErrorAndExit(error)
-  }
+  eval(updateNetwork(arguments.argumentForOption(Option.setNetwork)))
+}
+else if arguments.hasOption(Option.setPassword) {
+  eval(getPassword() >>- updatePassword)
 }
 else if arguments.hasOption(Option.help) {
   print(usage)
@@ -151,9 +156,7 @@ else if arguments.hasOption(Option.clear) {
   print("Settings cleared! 🖖")
 }
 else {
-  if let error = connect(defaults.password, toNetwork: defaults.network).error {
-    printErrorAndExit(error)
-  }
+  eval(connect(defaults.password, toNetwork: defaults.network))
 }
 
 exit(EXIT_SUCCESS)
