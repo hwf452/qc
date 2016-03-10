@@ -73,21 +73,3 @@ public final class Keychain {
   }
   
 }
-
-
-extension Keychain {
-  private struct Key {
-    static let Password = "password"
-    static let Network = "network"
-  }
-  
-  var password: String? {
-    get { return getObjectForKey(Key.Password) }
-    set { setObject(newValue, forKey: Key.Password) }
-  }
-  
-  var network: String? {
-    get { return getObjectForKey(Key.Network) }
-    set { setObject(newValue, forKey: Key.Network) }
-  }
-}
