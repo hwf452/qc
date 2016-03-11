@@ -1,4 +1,7 @@
 # qc 
+
+[![Build Status](https://travis-ci.org/inloop/qc.svg?branch=master)](https://travis-ci.org/inloop/qc)
+
 Cisco AnyConnect Secure Mobility Server helper for the lazy ones.
 This tool fires up the AppleScript which in turn fills in the network name then hits the Connect button then fills in the password and finally hits the OK button.
 When you install now, you get the disconnect feature for free.
