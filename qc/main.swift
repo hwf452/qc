@@ -5,29 +5,24 @@ enum QCError: ErrorType {
   case NetworkNotSet
   case CouldNotCreateScript(String)
   case AppleScriptError(NSDictionary)
-  case UnknownOption(String)
 }
 
-struct Option {
-  static let help = "--help"
-  static let clear = "--clear"
-  static let setup = "--setup"
-  static let setPassword = "--set-password"
-  static let setNetwork = "--set-network"
-  static let network = "--network"
+let cli = CommandLine()
+let helpOpt = BoolOption(shortFlag: "h", longFlag: "help", helpMessage: "Print help (this message) and exit")
+let setupOpt = BoolOption(shortFlag: "s", longFlag: "setup", helpMessage: "Run setup wizard")
+let clearOpt = BoolOption(shortFlag: "c", longFlag: "clear", helpMessage: "Clear saved settings")
+
+cli.addOptions(helpOpt, setupOpt, clearOpt)
+cli.formatOutput = { s, type in
+  if case .About = type {
+    return "usage: qc        \t\tConnect/Disconnect to/from the saved configuration\n" +
+           "   or: qc [option]\t\tPerforms given option\n\n" +
+           "Options:\n\n"
+  }
+  return cli.defaultFormat(s, type: type)
 }
 
-let arguments = Process.arguments
 var defaults = Keychain(identifier: "qc")
-
-let usage =
-  "usage: qc \t\t\t\tConnect to the saved network\n" +
-  "   or: qc \(Option.network) <network>\t\tConnect to the given network\n" +
-  "   or: qc \(Option.setup) \t\t\tRun setup wizard\n" +
-  "   or: qc \(Option.setPassword) \t\tSetup password\n" +
-  "   or: qc \(Option.setNetwork) <network>\tSet network\n" +
-  "   or: qc \(Option.clear) \t\t\tClear saved settings\n" +
-  "   or: qc \(Option.help) \t\t\tPrint help (this message) and exit\n"
 
 let format =
 "activate application \"Cisco AnyConnect Secure Mobility Client\"\n" +
@@ -48,8 +43,8 @@ let format =
 "end tell\n"
 
 func printErrorAndExit(error: ErrorType) {
-  print("\nerror: \(error)!\n")
-  print(usage)
+  print("\nError: \(error)\n")
+  cli.printUsage()
   exit(EXIT_FAILURE)
 }
 
@@ -148,28 +143,22 @@ func setup() {
   eval(getNetwork() >>- updateNetwork)
 }
 
-if arguments.hasOption(Option.setup) {
+do {
+  try cli.parse(true)
+}
+catch let e {
+  printErrorAndExit(e)
+}
+
+if helpOpt.wasSet {
+  cli.printUsage()
+}
+else if setupOpt.wasSet {
   setup()
 }
-else if arguments.hasOption(Option.setNetwork) {
-  eval(updateNetwork(arguments.argumentForOption(Option.setNetwork)))
-}
-else if arguments.hasOption(Option.setPassword) {
-  eval(getPassword() >>- updatePassword)
-}
-else if arguments.hasOption(Option.help) {
-  print(usage)
-}
-else if arguments.hasOption(Option.clear) {
+else if clearOpt.wasSet {
   defaults.clear()
   print("Settings cleared! 🖖")
-}
-else if arguments.hasOption(Option.network) {
-  eval(connect(defaults.password, toNetwork: arguments.argumentForOption(Option.network)))
-}
-else if arguments.count > 1 {
-  let option = arguments[1]
-  printErrorAndExit(QCError.UnknownOption(option))
 }
 else {
   eval(connect(defaults.password, toNetwork: defaults.network))

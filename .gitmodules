@@ -1,3 +1,6 @@
 [submodule "Result"]
 	path = Result
 	url = https://github.com/antitypical/Result.git
+[submodule "CommandLine"]
+	path = CommandLine
+	url = https://github.com/jatoben/CommandLine.git
