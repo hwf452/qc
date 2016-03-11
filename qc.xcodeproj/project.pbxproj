@@ -10,11 +10,11 @@
 		4A33EF301C8F4108008FEFCF /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33EF2E1C8F4108008FEFCF /* Result.swift */; };
 		4A33EF311C8F4108008FEFCF /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33EF2F1C8F4108008FEFCF /* ResultType.swift */; };
 		4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E771D1C8C4A6C007FB014 /* main.swift */; };
-		4A67AB3A1C91C5A800BA0073 /* Keychain+QC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB391C91C5A800BA0073 /* Keychain+QC.swift */; };
 		4A67AB3F1C92244E00BA0073 /* CommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3C1C92244E00BA0073 /* CommandLine.swift */; };
 		4A67AB401C92244E00BA0073 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3D1C92244E00BA0073 /* Option.swift */; };
 		4A67AB411C92244E00BA0073 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3E1C92244E00BA0073 /* StringExtensions.swift */; };
-		4AC57A381C9179A5009D26BC /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC57A371C9179A5009D26BC /* Keychain.swift */; };
+		4A67AB451C92A24600BA0073 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB431C92A24600BA0073 /* Keychain.swift */; };
+		4A67AB461C92A24600BA0073 /* Keychain+QC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB441C92A24600BA0073 /* Keychain+QC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,11 +34,11 @@
 		4A33EF2F1C8F4108008FEFCF /* ResultType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultType.swift; path = Result/Result/ResultType.swift; sourceTree = SOURCE_ROOT; };
 		4A5E771A1C8C4A6C007FB014 /* qc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = qc; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E771D1C8C4A6C007FB014 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		4A67AB391C91C5A800BA0073 /* Keychain+QC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Keychain+QC.swift"; sourceTree = "<group>"; };
 		4A67AB3C1C92244E00BA0073 /* CommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommandLine.swift; path = CommandLine/CommandLine/CommandLine.swift; sourceTree = SOURCE_ROOT; };
 		4A67AB3D1C92244E00BA0073 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Option.swift; path = CommandLine/CommandLine/Option.swift; sourceTree = SOURCE_ROOT; };
 		4A67AB3E1C92244E00BA0073 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = CommandLine/CommandLine/StringExtensions.swift; sourceTree = SOURCE_ROOT; };
-		4AC57A371C9179A5009D26BC /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		4A67AB431C92A24600BA0073 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Keychain.swift; path = Keychain/Keychain.swift; sourceTree = "<group>"; };
+		4A67AB441C92A24600BA0073 /* Keychain+QC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Keychain+QC.swift"; path = "Keychain/Keychain+QC.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,11 +80,10 @@
 		4A5E771C1C8C4A6C007FB014 /* qc */ = {
 			isa = PBXGroup;
 			children = (
+				4A67AB421C92A21C00BA0073 /* Keychain */,
 				4A67AB3B1C92243A00BA0073 /* CLI */,
 				4A33EF321C8F410D008FEFCF /* Result */,
 				4A5E771D1C8C4A6C007FB014 /* main.swift */,
-				4AC57A371C9179A5009D26BC /* Keychain.swift */,
-				4A67AB391C91C5A800BA0073 /* Keychain+QC.swift */,
 			);
 			path = qc;
 			sourceTree = "<group>";
@@ -97,6 +96,15 @@
 				4A67AB3E1C92244E00BA0073 /* StringExtensions.swift */,
 			);
 			name = CLI;
+			sourceTree = "<group>";
+		};
+		4A67AB421C92A21C00BA0073 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				4A67AB431C92A24600BA0073 /* Keychain.swift */,
+				4A67AB441C92A24600BA0073 /* Keychain+QC.swift */,
+			);
+			name = Keychain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,13 +165,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A67AB401C92244E00BA0073 /* Option.swift in Sources */,
-				4AC57A381C9179A5009D26BC /* Keychain.swift in Sources */,
 				4A33EF311C8F4108008FEFCF /* ResultType.swift in Sources */,
 				4A67AB411C92244E00BA0073 /* StringExtensions.swift in Sources */,
 				4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */,
 				4A33EF301C8F4108008FEFCF /* Result.swift in Sources */,
 				4A67AB3F1C92244E00BA0073 /* CommandLine.swift in Sources */,
-				4A67AB3A1C91C5A800BA0073 /* Keychain+QC.swift in Sources */,
+				4A67AB451C92A24600BA0073 /* Keychain.swift in Sources */,
+				4A67AB461C92A24600BA0073 /* Keychain+QC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
