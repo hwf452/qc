@@ -14,12 +14,13 @@ let clearOpt = BoolOption(shortFlag: "c", longFlag: "clear", helpMessage: "Clear
 
 cli.addOptions(helpOpt, setupOpt, clearOpt)
 cli.formatOutput = { s, type in
-  if case .About = type {
+  switch type {
+  case .About:
     return "usage: qc        \t\tConnect/Disconnect to/from the saved configuration\n" +
            "   or: qc [option]\t\tPerforms given option\n\n" +
            "Options:\n\n"
+  default: return cli.defaultFormat(s, type: type)
   }
-  return cli.defaultFormat(s, type: type)
 }
 
 var defaults = Keychain(identifier: "qc")
