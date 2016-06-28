@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		4A33EF301C8F4108008FEFCF /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33EF2E1C8F4108008FEFCF /* Result.swift */; };
-		4A33EF311C8F4108008FEFCF /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33EF2F1C8F4108008FEFCF /* ResultType.swift */; };
 		4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5E771D1C8C4A6C007FB014 /* main.swift */; };
 		4A67AB3F1C92244E00BA0073 /* CommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3C1C92244E00BA0073 /* CommandLine.swift */; };
 		4A67AB401C92244E00BA0073 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3D1C92244E00BA0073 /* Option.swift */; };
 		4A67AB411C92244E00BA0073 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB3E1C92244E00BA0073 /* StringExtensions.swift */; };
 		4A67AB451C92A24600BA0073 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB431C92A24600BA0073 /* Keychain.swift */; };
 		4A67AB461C92A24600BA0073 /* Keychain+QC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A67AB441C92A24600BA0073 /* Keychain+QC.swift */; };
+		4A9CF0351D2262BE00994B5A /* ResultProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9CF0341D2262BE00994B5A /* ResultProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +31,6 @@
 
 /* Begin PBXFileReference section */
 		4A33EF2E1C8F4108008FEFCF /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Result/Result/Result.swift; sourceTree = SOURCE_ROOT; };
-		4A33EF2F1C8F4108008FEFCF /* ResultType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultType.swift; path = Result/Result/ResultType.swift; sourceTree = SOURCE_ROOT; };
 		4A5E771A1C8C4A6C007FB014 /* qc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = qc; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5E771D1C8C4A6C007FB014 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		4A67AB3C1C92244E00BA0073 /* CommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommandLine.swift; path = CommandLine/CommandLine/CommandLine.swift; sourceTree = SOURCE_ROOT; };
@@ -39,6 +38,7 @@
 		4A67AB3E1C92244E00BA0073 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = CommandLine/CommandLine/StringExtensions.swift; sourceTree = SOURCE_ROOT; };
 		4A67AB431C92A24600BA0073 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Keychain.swift; path = Keychain/Keychain.swift; sourceTree = "<group>"; };
 		4A67AB441C92A24600BA0073 /* Keychain+QC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Keychain+QC.swift"; path = "Keychain/Keychain+QC.swift"; sourceTree = "<group>"; };
+		4A9CF0341D2262BE00994B5A /* ResultProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +55,8 @@
 		4A33EF321C8F410D008FEFCF /* Result */ = {
 			isa = PBXGroup;
 			children = (
+				4A9CF0341D2262BE00994B5A /* ResultProtocol.swift */,
 				4A33EF2E1C8F4108008FEFCF /* Result.swift */,
-				4A33EF2F1C8F4108008FEFCF /* ResultType.swift */,
 			);
 			name = Result;
 			sourceTree = "<group>";
@@ -134,11 +134,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Intel;
 				TargetAttributes = {
 					4A5E77191C8C4A6C007FB014 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -164,8 +165,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A9CF0351D2262BE00994B5A /* ResultProtocol.swift in Sources */,
 				4A67AB401C92244E00BA0073 /* Option.swift in Sources */,
-				4A33EF311C8F4108008FEFCF /* ResultType.swift in Sources */,
 				4A67AB411C92244E00BA0073 /* StringExtensions.swift in Sources */,
 				4A5E771E1C8C4A6C007FB014 /* main.swift in Sources */,
 				4A33EF301C8F4108008FEFCF /* Result.swift in Sources */,
@@ -265,6 +266,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -275,6 +277,8 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
