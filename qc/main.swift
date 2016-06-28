@@ -1,10 +1,10 @@
 import Foundation
 
-enum QCError: ErrorType {
-  case PasswordNotSet
-  case NetworkNotSet
-  case CouldNotCreateScript(String)
-  case AppleScriptError(NSDictionary)
+enum QCError: ErrorProtocol {
+  case passwordNotSet
+  case networkNotSet
+  case couldNotCreateScript(String)
+  case appleScriptError(NSDictionary)
 }
 
 let cli = CommandLine()
@@ -19,7 +19,7 @@ cli.formatOutput = { s, type in
     return "usage: qc        \t\tConnect/Disconnect to/from the saved configuration\n" +
            "   or: qc [option]\t\tPerforms given option\n\n" +
            "Options:\n\n"
-  default: return cli.defaultFormat(s, type: type)
+  default: return cli.defaultFormat(s: s, type: type)
   }
 }
 
@@ -43,7 +43,7 @@ let format =
   "return 0\n" +
 "end tell\n"
 
-func printErrorAndExit(error: ErrorType) {
+func printErrorAndExit(_ error: ErrorProtocol) {
   print("\nError: \(error)\n")
   cli.printUsage()
   exit(EXIT_FAILURE)
@@ -51,91 +51,91 @@ func printErrorAndExit(error: ErrorType) {
 
 func getPassword() -> Result<String?, QCError> {
   let password = getpass("Password: ")
-  return .Success(String.fromCString(password))
+  return .success(String(cString: password!))
 }
 
 func getNetwork() -> Result<String?, QCError> {
   print("Network: ", terminator: "")
-  return .Success(readLine(stripNewline: true))
+  return .success(readLine(strippingNewline: true))
 }
 
-func storePassword(password: String) -> Result<String, QCError> {
+func storePassword(_ password: String) -> Result<String, QCError> {
   defaults.password = password
-  return .Success(password)
+  return .success(password)
 }
 
-func storeNetwork(network: String) -> Result<String, QCError> {
+func storeNetwork(_ network: String) -> Result<String, QCError> {
   defaults.network = network
-  return .Success(network)
+  return .success(network)
 }
 
-func updatePassword(password: String?) -> Result<String, QCError> {
+func updatePassword(_ password: String?) -> Result<String, QCError> {
   return updateValue(password,
     validator: validatePassword,
     store: storePassword,
-    confirmation: {_ in .Success("Password updated! 🍻") }
+    confirmation: {_ in .success("Password updated! 🍻") }
   )
 }
 
-func updateNetwork(network: String?) -> Result<String, QCError> {
+func updateNetwork(_ network: String?) -> Result<String, QCError> {
   return updateValue(network,
     validator: validateNetwork,
     store: storeNetwork,
-    confirmation: {_ in .Success("Network updated! 🍻")})
+    confirmation: {_ in .success("Network updated! 🍻")})
 }
 
-func updateValue<T>(value: T?, validator validate: T? -> Result<T, QCError>, store storeValue: T -> Result<T, QCError>, confirmation sendConfirmation: T -> Result<String, QCError>) -> Result<String, QCError> {
+func updateValue<T>(_ value: T?, validator validate: (T?) -> Result<T, QCError>, store storeValue: (T) -> Result<T, QCError>, confirmation sendConfirmation: (T) -> Result<String, QCError>) -> Result<String, QCError> {
   return
     validate(value)
     >>- storeValue
     >>- sendConfirmation
 }
 
-func validateOptional<T>(value: T?, error: QCError) -> Result<T, QCError> {
+func validateOptional<T>(_ value: T?, error: QCError) -> Result<T, QCError> {
   switch value {
-  case let .Some(value): return .Success(value)
-  case .None: return .Failure(error)
+  case let .some(value): return .success(value)
+  case .none: return .failure(error)
   }
 }
 
-func validatePassword(password: String?) -> Result<String, QCError> {
-  return validateOptional(password, error: .PasswordNotSet)
+func validatePassword(_ password: String?) -> Result<String, QCError> {
+  return validateOptional(password, error: .passwordNotSet)
 }
 
-func validateNetwork(network: String?) -> Result<String, QCError> {
-  return validateOptional(network, error: .NetworkNotSet)
+func validateNetwork(_ network: String?) -> Result<String, QCError> {
+  return validateOptional(network, error: .networkNotSet)
 }
 
-func createScript(password: String, network: String) -> Result<NSAppleScript, QCError> {
+func createScript(_ password: String, network: String) -> Result<NSAppleScript, QCError> {
   let source = String(format: format, network, password)
   let script = NSAppleScript(source: source)
-  return validateOptional(script, error: .CouldNotCreateScript(source))
+  return validateOptional(script, error: .couldNotCreateScript(source))
 }
 
-func executeScript(script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCError> {
+func executeScript(_ script: NSAppleScript) ->  Result<NSAppleEventDescriptor, QCError> {
   var errorDictionary: NSDictionary? = nil
   let eventDescriptor = script.executeAndReturnError(&errorDictionary)
   switch errorDictionary {
-  case .Some(let error): return .Failure(.AppleScriptError(error))
-  case .None: return .Success(eventDescriptor)
+  case .some(let error): return .failure(.appleScriptError(error))
+  case .none: return .success(eventDescriptor)
   }
 }
 
-func recognizeEvent(descriptor: NSAppleEventDescriptor) -> Result<String, QCError> {
-    return descriptor.int32Value == 1 ? .Success("Disconnected! 🍻") : .Success("Connected! 👍")
+func recognizeEvent(_ descriptor: NSAppleEventDescriptor) -> Result<String, QCError> {
+    return descriptor.int32Value == 1 ? .success("Disconnected! 🍻") : .success("Connected! 👍")
 }
 
-func connect(password: String?, toNetwork network: String?) -> Result<String, QCError> {
+func connect(_ password: String?, toNetwork network: String?) -> Result<String, QCError> {
   return validatePassword(password) &&& validateNetwork(network)
     >>- createScript
     >>- executeScript
     >>- recognizeEvent
 }
 
-func eval<T>(result: Result<T, QCError>, success: T -> () = { print($0) }, fail: QCError -> () = printErrorAndExit) {
+func eval<T>(_ result: Result<T, QCError>, success: (T) -> () = { print($0) }, fail: (QCError) -> () = printErrorAndExit) {
   switch result {
-  case let .Success(res): success(res)
-  case let .Failure(error): fail(error)
+  case let .success(res): success(res)
+  case let .failure(error): fail(error)
   }
 }
 
@@ -144,8 +144,9 @@ func setup() {
   eval(getNetwork() >>- updateNetwork)
 }
 
+
 do {
-  try cli.parse(true)
+  try cli.parse(strict: true)
 }
 catch let e {
   printErrorAndExit(e)

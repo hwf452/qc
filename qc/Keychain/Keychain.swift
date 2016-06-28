@@ -5,7 +5,7 @@ public final class Keychain {
   private let identifier: String
   private lazy var values: NSMutableDictionary = {
     guard let data = self.load(),
-      values = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? NSMutableDictionary else {
+      values = NSKeyedUnarchiver.unarchiveObject(with: data) as? NSMutableDictionary else {
         return NSMutableDictionary()
     }
     return values
@@ -15,51 +15,51 @@ public final class Keychain {
     self.identifier = identifier
   }
   
-  public func getObjectForKey<T>(key: String) -> T? {
-    return values.objectForKey(key) as? T
+  public func getObjectForKey<T>(_ key: String) -> T? {
+    return values.object(forKey: key) as? T
   }
   
-  public func setObject(object: AnyObject?, forKey key: String) {
+  public func setObject(_ object: AnyObject?, forKey key: String) -> Bool {
     if let objectToSet = object {
       values.setObject(objectToSet, forKey: key)
     }
     else {
-      values.removeObjectForKey(key)
+      values.removeObject(forKey: key)
     }
-    let archivedData = NSKeyedArchiver.archivedDataWithRootObject(values)
-    save(archivedData)
+    let archivedData = NSKeyedArchiver.archivedData(withRootObject: values)
+    return save(archivedData)
   }
   
   public func clear() {
-    delete()
+    _ = delete()
     values = NSMutableDictionary()
   }
   
-  private func save(data: NSData) -> Bool {
+  private func save(_ data: Data) -> Bool {
     let query = [
       kSecClass as String       : kSecClassGenericPassword as String,
       kSecAttrAccount as String : identifier,
       kSecValueData as String   : data ]
     
-    SecItemDelete(query as CFDictionaryRef)
+    SecItemDelete(query as CFDictionary)
     
-    let status = SecItemAdd(query as CFDictionaryRef, nil)
+    let status = SecItemAdd(query as CFDictionary, nil)
     
     return status == noErr
   }
   
-  private func load() -> NSData? {
+  private func load() -> Data? {
     let query = [
       kSecClass as String       : kSecClassGenericPassword,
       kSecAttrAccount as String : identifier,
       kSecReturnData as String  : kCFBooleanTrue,
       kSecMatchLimit as String  : kSecMatchLimitOne ]
     
-    let dataTypeRef = UnsafeMutablePointer<AnyObject?>.alloc(1)
+    let dataTypeRef = UnsafeMutablePointer<AnyObject?>(allocatingCapacity: 1)
     
     let status = SecItemCopyMatching(query, dataTypeRef)
     
-    guard let data = dataTypeRef.memory as? NSData where status == noErr else { return nil }
+    guard let data = dataTypeRef.pointee as? Data where status == noErr else { return nil }
     return data
   }
   
@@ -68,7 +68,7 @@ public final class Keychain {
       kSecClass as String       : kSecClassGenericPassword,
       kSecAttrAccount as String : identifier ]
     
-    let status = SecItemDelete(query as CFDictionaryRef)
+    let status = SecItemDelete(query as CFDictionary)
     
     return status == noErr
   }
