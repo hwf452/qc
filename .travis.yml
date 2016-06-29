@@ -3,11 +3,11 @@ osx_image: xcode7.2
 language: swift
 xcode_project: qc.xcodeproj
 xcode_scheme: qc
-deploy:
-  skip_cleanup: true
-  provider: releases
-  api_key:
-    secure: dE/p0UBznn+SAs/cSp6njRAtkaLmgcYUE9lJD/vfr8sWt+scOoj1CPUmwOlZ+5EwEqw3jo2xKXUDpLk0Xfxrqu7qRMsDunp68KLMNRVgMuHBb0/+7kMLQaFOY0uD/GhUlps8EalFxbiRR3/FbtfkEtdzB9NV+MS/+BNM+cM6LdVH/UNRK/LW1XLLKPAXhfDpyKvszpbCJHISU52Mn7OTB/7ACUuWnnVrPAxbO+Wjf4ZRXcY+1S4laCIs+Oe+hgS8LPGCIJ5s3OLbzD4ZEd+sKYbYUPnpe0DzmU+S/YFntj3DrYOc58lJoLEFcH0TgIMr6Nqpv1RZiaHF3Rss2cTroiZ6EYCFHBhuG+NOIg3dXU3ZTt1Tuf4bByFMLtF1QpkFj/KOf83pZ14/AsZpM81DCayiIhSW6gmG8bXQ5DBCsbNQNQqIocl5NHeyXCuZDdPGkj15zibLw31J8Y3j072UtyS0DeqHGuLO92IlmuVFSDVMFnMFI1utXyeXECrATLBPhMP5hCfEMBx5JNzzisK0UcAoQHvIw0eemghNWZJNrMNIw9zEL7omdRtHnFtY/naTftiMmDiQqqaFHpxPU6b58jkLg3NM6BDLCQq6nhfR8bqlki+AmLohei1JraNrhFJplzDPRaQ1MzxcM3nlptGimSPpyatFky52O/pgZ+peG0g=
-  file: build/debug/qc
-  on:
-    repo: inloop/qc
+#deploy:
+#  skip_cleanup: true
+#  provider: releases
+#  api_key:
+#    secure: dE/p0UBznn+SAs/cSp6njRAtkaLmgcYUE9lJD/vfr8sWt+scOoj1CPUmwOlZ+5EwEqw3jo2xKXUDpLk0Xfxrqu7qRMsDunp68KLMNRVgMuHBb0/+7kMLQaFOY0uD/GhUlps8EalFxbiRR3/FbtfkEtdzB9NV+MS/+BNM+cM6LdVH/UNRK/LW1XLLKPAXhfDpyKvszpbCJHISU52Mn7OTB/7ACUuWnnVrPAxbO+Wjf4ZRXcY+1S4laCIs+Oe+hgS8LPGCIJ5s3OLbzD4ZEd+sKYbYUPnpe0DzmU+S/YFntj3DrYOc58lJoLEFcH0TgIMr6Nqpv1RZiaHF3Rss2cTroiZ6EYCFHBhuG+NOIg3dXU3ZTt1Tuf4bByFMLtF1QpkFj/KOf83pZ14/AsZpM81DCayiIhSW6gmG8bXQ5DBCsbNQNQqIocl5NHeyXCuZDdPGkj15zibLw31J8Y3j072UtyS0DeqHGuLO92IlmuVFSDVMFnMFI1utXyeXECrATLBPhMP5hCfEMBx5JNzzisK0UcAoQHvIw0eemghNWZJNrMNIw9zEL7omdRtHnFtY/naTftiMmDiQqqaFHpxPU6b58jkLg3NM6BDLCQq6nhfR8bqlki+AmLohei1JraNrhFJplzDPRaQ1MzxcM3nlptGimSPpyatFky52O/pgZ+peG0g=
+#  file: build/debug/qc
+#  on:
+#    repo: inloop/qc
